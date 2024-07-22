@@ -3,13 +3,22 @@ import { register } from "../../register/index";
 // Define the regex pattern for validating @stud.noroff.no email addresses
 const emailPattern = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
 
+/**
+ * Handles the registration form submission, validates the email, and sends data to the API.
+ *
+ * @param {Event} event - The form submit event.
+ */
 export const handleRegisterFormSubmit = (event) => {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
-  const profile = Object.fromEntries(formData.entries());
 
-  // Extract email from the profile data
+ 
+  const profile = {
+    ...Object.fromEntries(formData.entries())
+  };
+
+  
   const userEmail = profile.userEmail;
 
   // Validate the email using regex
