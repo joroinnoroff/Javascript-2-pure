@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 
+  <script src="./src/(auth)/login/index.js" defer type="module"></script>
   <script src="./src/(auth)/register/index.js" defer type="module"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +15,32 @@
 </head>
 <body class="min-vh-100 d-flex flex-column">
   <div id="spinner"></div>
+  <form class="modal-content" id="loginForm" action="#">
+    <div class="modal-header">
+      <h1>NOROFF - SOCIAL</h1>
+      <h5 class="modal-title" id="SignModalLabel">SIGN IN </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+ 
+      <div class="form-floating mb-3">
+        <input required type="email" class="form-control" id="SignEmail" name="email" placeholder="name@stud.noroff.no" />
+        <label for="SignEmail">Email address</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input required type="password" minlength="8" class="form-control" id="SignPassword" name="password" placeholder="Password" />
+        <label for="SignPassword">Password</label>
+      </div>
+    
+    </div>
+    <div class="modal-footer">
+      <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-success">Sign in</button>
+    </div>
+  </form>
+
+
+
   <form class="modal-content" id="registerForm" action="#">
     <div class="modal-header">
       <h1>NOROFF - SOCIAL</h1>
@@ -44,5 +70,10 @@
       <button type="submit" class="btn btn-success">Create Profile</button>
     </div>
   </form>
+
+
+  <div>
+    Render posts here once auth
+  </div>
 </body>
 </html>
