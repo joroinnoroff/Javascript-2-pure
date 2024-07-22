@@ -10,7 +10,7 @@ const fetchAndDisplayData = async () => {
   const accessToken = localStorage.getItem('accessToken');
   const profile = localStorage.getItem('profile');
 
-  // Redirect to login page if no access token is found
+ 
   if (!accessToken || !profile) {
     window.location.href = '/';
     return;
