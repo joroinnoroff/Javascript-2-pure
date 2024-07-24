@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Post</title>
+</head>
+<body>
+  <main>
+    <form id="createPostForm">
+      <div>
+        <label for="TitlePost">Title of post</label>
+        <input type="text" id="TitlePost" required>
+      </div>
+
+      <div>
+        <label for="BodyPost">Body of post</label>
+        <textarea id="BodyPost" required></textarea>
+      </div>
+
+      <div>
+        <label for="TagsPost">Tags of post (comma-separated)</label>
+        <input type="text" id="TagsPost">
+      </div>
+
+      <div>
+        <label for="ImgPost">Image URL</label>
+        <input type="url" id="ImgPost">
+      </div>
+
+      <div>
+        <button type="submit">Create Post</button>
+      </div>
+    </form>
+  </main>
+  <script src="./src/create-post.js"></script>
+</body>
+</html>

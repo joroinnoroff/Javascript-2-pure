@@ -10,7 +10,6 @@ const fetchAndDisplayData = async () => {
   const accessToken = localStorage.getItem('accessToken');
   const profile = localStorage.getItem('profile');
 
- 
   if (!accessToken || !profile) {
     window.location.href = '/';
     return;
@@ -42,7 +41,6 @@ const displayUserInfo = (user) => {
   document.getElementById('signOutButton').addEventListener('click', signOut);
 };
 
- 
 const signOut = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('profile');
@@ -51,8 +49,10 @@ const signOut = () => {
 
 /**
  * Fetch and display posts
- * @param {string} accessToken - The access token for authorization
+ * @param {string} accessToken  
  */
+let allPosts = [];  
+
 const fetchAndDisplayPosts = async (accessToken) => {
   const options = {
     headers: {
@@ -61,14 +61,15 @@ const fetchAndDisplayPosts = async (accessToken) => {
   };
 
   try {
-    const response = await fetch(`${API_SOCIAL_URL}/posts`, options);
+    const response = await fetch(`${API_SOCIAL_URL}/posts?_author=true`, options);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
-    renderPosts(data);
+    allPosts = data;  
+    renderPosts(allPosts);  
   } catch (error) {
     console.error('Error fetching posts:', error);
     alert('Failed to fetch posts. Please check the console for details.');
@@ -77,9 +78,9 @@ const fetchAndDisplayPosts = async (accessToken) => {
 
 /**
  * Render posts on the page
- * @param {Array} posts  
+ * @param {Array} posts - Array of post objects
  */
-const renderPosts = (posts) => {
+ const renderPosts = (posts) => {
   const postsContainer = document.getElementById('postsContainer');
   postsContainer.innerHTML = '';
 
@@ -88,19 +89,39 @@ const renderPosts = (posts) => {
     return;
   }
 
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const userId = profile.name; // Assuming profile has an 'id' property for user ID
+
   posts.forEach(post => {
     const postElement = document.createElement('div');
     postElement.classList.add('post');
     postElement.innerHTML = `
       <h2>${post.title}</h2>
       <p>${post.body}</p>
+      <p><strong>Author:</strong> ${post.author.name}</p>
       <p><strong>Comments:</strong> ${post._count.comments}</p>
       <p><strong>Reactions:</strong> ${post._count.reactions}</p>
       <p><strong>Created at:</strong> ${new Date(post.created).toLocaleString()}</p>
+      ${post.author.name === userId ? `<a href="/editPost.html?id=${post.id}">Edit</a>` : ''}
+      <a href="/postId.html?id=${post.id}">View Details</a> 
     `;
     postsContainer.appendChild(postElement);
   });
 };
 
- 
-window.addEventListener('DOMContentLoaded', fetchAndDisplayData);
+/**
+ * Filter posts based on the search query
+ * @param {Event} event - Input event
+ */
+const filterPosts = (event) => {
+  const query = event.target.value.toLowerCase();
+  const filteredPosts = allPosts.filter(post => 
+    post.title.toLowerCase().includes(query) || post.body.toLowerCase().includes(query)
+  );
+  renderPosts(filteredPosts);
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  fetchAndDisplayData();
+  document.getElementById('SearchField').addEventListener('input', filterPosts);
+});
