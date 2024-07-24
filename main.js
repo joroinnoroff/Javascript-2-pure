@@ -80,7 +80,7 @@ const fetchAndDisplayPosts = async (accessToken) => {
  * Render posts on the page
  * @param {Array} posts - Array of post objects
  */
- const renderPosts = (posts) => {
+const renderPosts = (posts) => {
   const postsContainer = document.getElementById('postsContainer');
   postsContainer.innerHTML = '';
 
@@ -90,7 +90,7 @@ const fetchAndDisplayPosts = async (accessToken) => {
   }
 
   const profile = JSON.parse(localStorage.getItem('profile'));
-  const userId = profile.name; // Assuming profile has an 'id' property for user ID
+  const userId = profile.name; 
 
   posts.forEach(post => {
     const postElement = document.createElement('div');
@@ -110,18 +110,45 @@ const fetchAndDisplayPosts = async (accessToken) => {
 };
 
 /**
- * Filter posts based on the search query
+ * Filter and sort posts based on the search query and sort option
  * @param {Event} event - Input event
  */
-const filterPosts = (event) => {
-  const query = event.target.value.toLowerCase();
-  const filteredPosts = allPosts.filter(post => 
+const filterAndSortPosts = () => {
+  const query = document.getElementById('SearchField').value.toLowerCase();
+  const sortOption = document.getElementById('sortSelect').value;
+
+  
+  let filteredPosts = allPosts.filter(post => 
     post.title.toLowerCase().includes(query) || post.body.toLowerCase().includes(query)
   );
+
+ 
+  filteredPosts.sort((a, b) => {
+    let comparison = 0;
+    switch (sortOption) {
+      case 'commentsDesc':
+        comparison = b._count.comments - a._count.comments;
+        break;
+      case 'commentsAsc':
+        comparison = a._count.comments - b._count.comments;
+        break;
+      case 'reactionsDesc':
+        comparison = b._count.reactions - a._count.reactions;
+        break;
+      case 'reactionsAsc':
+        comparison = a._count.reactions - b._count.reactions;
+        break;
+    }
+    return comparison;
+  });
+
   renderPosts(filteredPosts);
 };
 
 window.addEventListener('DOMContentLoaded', () => {
   fetchAndDisplayData();
-  document.getElementById('SearchField').addEventListener('input', filterPosts);
+  
+ 
+  document.getElementById('SearchField').addEventListener('input', filterAndSortPosts);
+  document.getElementById('sortSelect').addEventListener('change', filterAndSortPosts);
 });
